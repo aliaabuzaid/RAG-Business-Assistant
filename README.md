@@ -1,22 +1,82 @@
-# RAG WhatsApp Business Assistant
+# RAG Business Assistant
 
-An AI-powered WhatsApp business assistant that uses Retrieval-Augmented Generation (RAG), structured business data, and workflow automation to provide accurate customer support and sales assistance.
+An AI-powered business assistant that uses Retrieval-Augmented Generation (RAG) to retrieve relevant information from a business knowledge base and provide grounded, context-aware answers.
 
 ## Overview
 
-This project demonstrates how an AI agent can combine:
+This project demonstrates how RAG can be used to connect an AI assistant with a company's internal knowledge.
 
-* WhatsApp conversations
-* Business knowledge through RAG
-* Real-time data from a database
-* Workflow automation
-* Product and stock information
-* Delivery information
-* Customer and order workflows
+Instead of relying only on the language model's general knowledge, the assistant retrieves relevant business documents and uses them as context before generating a response.
 
-The goal is to build a practical AI assistant that can answer customer questions while using reliable business data instead of relying only on the language model.
+The project focuses on:
 
-## Business Flow
+* Knowledge retrieval
+* Semantic search
+* Vector embeddings
+* Context-aware AI responses
+* Business knowledge management
+* WhatsApp as a conversational interface
+
+## How It Works
+
+```text
+Business Knowledge
+       ↓
+Documents
+       ↓
+Text Processing
+       ↓
+OpenAI Embeddings
+       ↓
+Vector Database
+       ↓
+Semantic Search
+       ↓
+Relevant Context
+       ↓
+AI Agent
+       ↓
+Grounded Response
+       ↓
+WhatsApp
+```
+
+## Key Features
+
+### Knowledge Base
+
+The assistant can work with business information such as:
+
+* Company information
+* Products and services
+* Frequently asked questions
+* Policies
+* Payment information
+* Delivery policies
+* Return policies
+* Customer support information
+
+### Semantic Search
+
+User questions are converted into embeddings and compared with stored document embeddings to retrieve the most relevant information.
+
+This allows the assistant to find relevant content even when the customer's wording does not exactly match the original document.
+
+### Grounded AI Responses
+
+Retrieved documents are provided to the AI agent as context.
+
+The assistant is instructed to:
+
+* Use retrieved information when answering
+* Avoid inventing business information
+* Distinguish unavailable information
+* Ask for clarification when necessary
+* Keep responses concise and natural
+
+### WhatsApp Interface
+
+WhatsApp is used as the conversational interface for interacting with the assistant.
 
 ```text
 Customer
@@ -27,210 +87,189 @@ Evolution API
    ↓
 n8n
    ↓
-AI Agent
-   ├── RAG Knowledge Base
-   ├── Product Data
-   ├── Stock Tool
-   ├── Delivery Tool
-   └── Business Data
-   ↓
-Customer Response
-```
-
-## Key Features
-
-### WhatsApp AI Assistant
-
-* Handles customer conversations through WhatsApp
-* Uses simple and natural Arabic
-* Provides short and helpful responses
-* Understands common customer questions
-* Supports sales and customer-service conversations
-
-### RAG Knowledge Base
-
-The assistant can retrieve business information such as:
-
-* Brand information
-* Products and services
-* Payment methods
-* Delivery policies
-* Return policies
-* Frequently asked questions
-* Customer-service information
-
-The knowledge base is stored as documents with vector embeddings and retrieved when relevant information is needed.
-
-### Real-Time Business Data
-
-Operational information is kept in structured database tables instead of the RAG knowledge base.
-
-Examples include:
-
-* Products
-* Product variants
-* Stock
-* Delivery zones
-* Distributors
-* Customers
-* Orders
-
-This separation helps keep frequently changing business data up to date.
-
-### Delivery Information
-
-Delivery fees and delivery times are retrieved from structured delivery-zone data.
-
-The AI assistant should not invent delivery prices when the requested location is unavailable.
-
-### Sales Workflow
-
-The assistant can:
-
-1. Understand the customer's request
-2. Search for relevant product information
-3. Check product availability
-4. Provide delivery information
-5. Collect required order details
-6. Confirm the order with the customer
-7. Process the order through the automation workflow
-
-Orders are created only after explicit customer confirmation.
-
-## RAG Architecture
-
-```text
-Business Documents
-        ↓
-Text Processing
-        ↓
-OpenAI Embeddings
-        ↓
-Vector Database
-        ↓
-Semantic Search
-        ↓
-Relevant Context
-        ↓
-AI Agent
-        ↓
-WhatsApp Response
-```
-
-## Database Architecture
-
-Structured operational data is separated from the knowledge base.
-
-```text
-Supabase
-│
-├── Products
-├── Product Variants
-├── Customers
-├── Orders
-├── Order Items
-├── Delivery Zones
-├── Distributors
-└── Documents + Embeddings
-```
-
-## Automation Architecture
-
-```text
-WhatsApp
-   ↓
-Evolution API
-   ↓
-Webhook
-   ↓
-n8n
-   ↓
-Customer Processing
+RAG Retrieval
    ↓
 AI Agent
-   ├── RAG Retrieval
-   ├── Stock Check
-   ├── Delivery Check
-   └── Business Tools
    ↓
 Response
    ↓
 WhatsApp
 ```
 
-## Tech Stack
+## RAG Architecture
 
-| Technology    | Purpose                      |
-| ------------- | ---------------------------- |
-| n8n           | Workflow automation          |
-| OpenAI        | AI model and embeddings      |
-| Supabase      | Database and vector storage  |
-| PostgreSQL    | Structured business data     |
-| pgvector      | Vector similarity search     |
-| Evolution API | WhatsApp integration         |
-| RAG           | Business knowledge retrieval |
-| REST APIs     | External integrations        |
-| Webhooks      | Event-driven automation      |
+```text
+                 ┌──────────────────────┐
+                 │  Business Documents  │
+                 └──────────┬───────────┘
+                            ↓
+                 ┌──────────────────────┐
+                 │   Text Processing    │
+                 └──────────┬───────────┘
+                            ↓
+                 ┌──────────────────────┐
+                 │  OpenAI Embeddings   │
+                 └──────────┬───────────┘
+                            ↓
+                 ┌──────────────────────┐
+                 │ Supabase + pgvector  │
+                 └──────────┬───────────┘
+                            ↑
+                            │
+                     Semantic Search
+                            ↑
+                            │
+                 ┌──────────┴───────────┐
+                 │     User Question    │
+                 └──────────┬───────────┘
+                            ↓
+                 ┌──────────────────────┐
+                 │      AI Agent        │
+                 └──────────┬───────────┘
+                            ↓
+                 ┌──────────────────────┐
+                 │   Grounded Answer    │
+                 └──────────────────────┘
+```
 
-## Important Design Principles
+## Knowledge vs. Operational Data
 
-### Use RAG for Knowledge
+One of the main design principles of this project is separating **knowledge** from **live business data**.
 
-Stable business information such as policies, FAQs, and brand information can be stored in the knowledge base.
+### Knowledge Base
 
-### Use Database Tools for Live Data
+RAG is suitable for relatively stable information such as:
 
-Frequently changing information such as:
+```text
+Company Information
+FAQs
+Policies
+Payment Methods
+Return Policy
+Service Information
+Delivery Policy
+```
 
-* Stock
-* Delivery fees
-* Product availability
-* Customers
-* Orders
+### Operational Data
 
-should be retrieved from structured database tables.
+Frequently changing information should remain in structured database tables or dedicated tools.
 
-### Do Not Invent Business Information
+Examples:
 
-The AI assistant should not guess:
+```text
+Stock
+Orders
+Customers
+Delivery Fees
+Product Availability
+Transactions
+```
 
-* Product prices
-* Stock quantities
-* Delivery fees
-* Policies
-* Order information
+This separation helps keep the knowledge base clean and prevents outdated operational information from being treated as permanent knowledge.
 
-When information is unavailable, the assistant should clearly communicate that it needs confirmation or additional information.
-
-## Example Conversation
+## Example Query
 
 ```text
 Customer:
-عايز كريم للترطيب
+ما هي سياسة الاسترجاع؟
 
-AI Assistant:
-أكيد 🌸 عندنا كريم ريحانة للترطيب.
-تحبي أعرفك بالسعر والتفاصيل؟
+        ↓
 
-Customer:
-أيوه
+Question Embedding
 
-AI Assistant:
-السعر  ... 
-والكمية المتوفرة حاليًا ...
+        ↓
 
-Customer:
-عايزة واحد
+Vector Search
 
-AI Assistant:
-تمام. ممكن ترسلي الموقع ورقم التواصل عشان نجهز الطلب؟
+        ↓
 
-Customer:
-تمام، أكّد الطلب
+Relevant Policy Document
 
-AI Assistant:
-تم تأكيد طلبك بنجاح.
+        ↓
+
+AI Agent
+
+        ↓
+
+Answer based on retrieved context
 ```
+
+## Example Knowledge Retrieval
+
+```text
+Query:
+هل يمكنني إرجاع المنتج بعد استلامه؟
+
+Retrieved Context:
+Return Policy
+- Customers can request a return according to the
+  company's return conditions.
+- Return requests must follow the stated policy.
+
+AI Response:
+أكيد. يمكن طلب الاسترجاع وفقًا لسياسة الاسترجاع
+والشروط المحددة من الشركة.
+```
+
+## Tech Stack
+
+| Technology    | Purpose                     |
+| ------------- | --------------------------- |
+| n8n           | Workflow automation         |
+| OpenAI        | LLM and embeddings          |
+| Supabase      | Database and vector storage |
+| PostgreSQL    | Structured data             |
+| pgvector      | Vector similarity search    |
+| Evolution API | WhatsApp integration        |
+| RAG           | Knowledge retrieval         |
+| REST APIs     | System integration          |
+| Webhooks      | Event-driven communication  |
+
+## Automation Workflow
+
+```text
+WhatsApp Message
+       ↓
+Evolution API
+       ↓
+n8n Webhook
+       ↓
+Process User Question
+       ↓
+Generate Embedding
+       ↓
+Search Vector Database
+       ↓
+Retrieve Relevant Documents
+       ↓
+Pass Context to AI Agent
+       ↓
+Generate Response
+       ↓
+Send Response to WhatsApp
+```
+
+## Design Principles
+
+### 1. Retrieve Before Generating
+
+The assistant retrieves relevant business information before generating an answer.
+
+### 2. Do Not Invent Information
+
+If the required information cannot be found in the knowledge base, the assistant should not fabricate an answer.
+
+### 3. Separate RAG from Live Data
+
+RAG handles business knowledge, while structured tools and database queries handle frequently changing operational information.
+
+### 4. Keep Responses Grounded
+
+The AI should base its answers on the retrieved business context whenever the question relates to company-specific information.
+
+### 5. Keep the Knowledge Base Maintainable
+
+Business documents should be organized so that information can be updated without changing the AI agent's core logic.
 
 ## Security
 
@@ -242,17 +281,19 @@ Do not store:
 * Database passwords
 * WhatsApp credentials
 * Webhook secrets
-* Real customer information
-* Production credentials
+* Private business information
+* Real customer data
 
-Credentials should be managed through n8n credentials, environment variables, or secure secret management.
+Credentials should be managed through secure n8n credentials, environment variables, or secret management systems.
 
 ## Project Purpose
 
-This project demonstrates how RAG, AI agents, structured business data, and workflow automation can be combined to build practical WhatsApp business assistants.
+This project demonstrates how Retrieval-Augmented Generation can connect AI assistants to real business knowledge.
+
+It focuses on the architecture behind reliable AI knowledge retrieval rather than building a complete sales or order-management system.
 
 ---
 
 ### Built by Alia Abuzaid
 
-AI Automation Developer | AI Agents | n8n | RAG | WhatsApp Automation
+AI Automation Developer | AI Agents | n8n | RAG | Business Automation

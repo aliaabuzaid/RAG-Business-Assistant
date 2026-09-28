@@ -1,144 +1,154 @@
-# RAG Business Assistant
+# 🧠 RAG Business Assistant
 
-An AI-powered business assistant that uses Retrieval-Augmented Generation (RAG) to retrieve relevant information from a business knowledge base and provide grounded, context-aware answers.
+An AI-powered business knowledge assistant built with **Retrieval-Augmented Generation (RAG)**.
 
-## Overview
+The system connects an AI assistant to a structured business knowledge base, retrieves relevant information using semantic search, and uses the retrieved context to generate grounded responses.
 
-This project demonstrates how RAG can be used to connect an AI assistant with a company's internal knowledge.
+> **Focus:** RAG architecture, semantic search, embeddings, vector databases, and grounded AI responses.
 
-Instead of relying only on the language model's general knowledge, the assistant retrieves relevant business documents and uses them as context before generating a response.
+---
 
-The project focuses on:
+## 🎯 Project Overview
 
-* Knowledge retrieval
-* Semantic search
-* Vector embeddings
-* Context-aware AI responses
-* Business knowledge management
-* WhatsApp as a conversational interface
+Large Language Models can generate useful answers, but they do not automatically know a company's internal information.
 
-## How It Works
+This project demonstrates how to connect an AI assistant to business-specific knowledge using a **Retrieval-Augmented Generation pipeline**.
+
+Instead of relying only on the model's general knowledge:
 
 ```text
-Business Knowledge
-       ↓
-Documents
-       ↓
-Text Processing
-       ↓
-OpenAI Embeddings
-       ↓
-Vector Database
-       ↓
+User Question
+      ↓
+Generate Embedding
+      ↓
 Semantic Search
-       ↓
-Relevant Context
-       ↓
-AI Agent
-       ↓
+      ↓
+Retrieve Relevant Documents
+      ↓
+Build Context
+      ↓
+AI Agent / LLM
+      ↓
 Grounded Response
-       ↓
-WhatsApp
 ```
 
-## Key Features
+---
 
-### Knowledge Base
+## 🔍 What This Project Demonstrates
 
-The assistant can work with business information such as:
+* Retrieval-Augmented Generation (RAG)
+* Text embeddings
+* Semantic search
+* Vector similarity search
+* Knowledge-base design
+* Context retrieval
+* Grounded AI responses
+* Separation of knowledge and operational data
+* Workflow automation with n8n
+* Supabase + PostgreSQL + pgvector
+* AI integration through APIs
+
+---
+
+## 🏗️ RAG Architecture
+
+```text
+                    BUSINESS KNOWLEDGE
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │    Documents    │
+                  └────────┬────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │ Text Processing │
+                  └────────┬────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │    Embeddings   │
+                  │     OpenAI      │
+                  └────────┬────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │    Supabase     │
+                  │    pgvector     │
+                  └────────┬────────┘
+                           │
+                    Vector Search
+                           ▲
+                           │
+                  ┌────────┴────────┐
+                  │  User Question  │
+                  └────────┬────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │ Retrieve Top-K  │
+                  │    Context      │
+                  └────────┬────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │    AI Agent     │
+                  └────────┬────────┘
+                           │
+                           ▼
+                  ┌─────────────────┐
+                  │ Grounded Answer │
+                  └─────────────────┘
+```
+
+---
+
+## 📚 Knowledge Base
+
+The RAG knowledge base can contain relatively stable business information such as:
 
 * Company information
 * Products and services
 * Frequently asked questions
-* Policies
-* Payment information
+* Payment methods
 * Delivery policies
 * Return policies
 * Customer support information
+* Business rules and procedures
 
-### Semantic Search
+The documents are converted into embeddings and stored in a vector database for semantic retrieval.
 
-User questions are converted into embeddings and compared with stored document embeddings to retrieve the most relevant information.
+---
 
-This allows the assistant to find relevant content even when the customer's wording does not exactly match the original document.
+## 🔎 Semantic Search
 
-### Grounded AI Responses
+The system does not depend on exact keyword matching.
 
-Retrieved documents are provided to the AI agent as context.
+A user's question is converted into an embedding and compared with the stored document embeddings.
 
-The assistant is instructed to:
-
-* Use retrieved information when answering
-* Avoid inventing business information
-* Distinguish unavailable information
-* Ask for clarification when necessary
-* Keep responses concise and natural
-
-### WhatsApp Interface
-
-WhatsApp is used as the conversational interface for interacting with the assistant.
+This allows the system to retrieve information that is **semantically related** to the question, even when the wording is different.
 
 ```text
-Customer
-   ↓
-WhatsApp
-   ↓
-Evolution API
-   ↓
-n8n
-   ↓
-RAG Retrieval
-   ↓
-AI Agent
-   ↓
-Response
-   ↓
-WhatsApp
+User Question
+      ↓
+Embedding
+      ↓
+Vector Similarity Search
+      ↓
+Relevant Documents
+      ↓
+Context
 ```
 
-## RAG Architecture
+---
 
-```text
-                 ┌──────────────────────┐
-                 │  Business Documents  │
-                 └──────────┬───────────┘
-                            ↓
-                 ┌──────────────────────┐
-                 │   Text Processing    │
-                 └──────────┬───────────┘
-                            ↓
-                 ┌──────────────────────┐
-                 │  OpenAI Embeddings   │
-                 └──────────┬───────────┘
-                            ↓
-                 ┌──────────────────────┐
-                 │ Supabase + pgvector  │
-                 └──────────┬───────────┘
-                            ↑
-                            │
-                     Semantic Search
-                            ↑
-                            │
-                 ┌──────────┴───────────┐
-                 │     User Question    │
-                 └──────────┬───────────┘
-                            ↓
-                 ┌──────────────────────┐
-                 │      AI Agent        │
-                 └──────────┬───────────┘
-                            ↓
-                 ┌──────────────────────┐
-                 │   Grounded Answer    │
-                 └──────────────────────┘
-```
+## 🧩 Knowledge vs. Operational Data
 
-## Knowledge vs. Operational Data
+A key design decision is separating **business knowledge** from **live operational data**.
 
-One of the main design principles of this project is separating **knowledge** from **live business data**.
+### Knowledge → RAG
 
-### Knowledge Base
-
-RAG is suitable for relatively stable information such as:
+Suitable for relatively stable information:
 
 ```text
 Company Information
@@ -150,150 +160,204 @@ Service Information
 Delivery Policy
 ```
 
-### Operational Data
+### Operational Data → Database / Tools
 
-Frequently changing information should remain in structured database tables or dedicated tools.
-
-Examples:
+Frequently changing information should be retrieved directly from structured data:
 
 ```text
 Stock
 Orders
 Customers
-Delivery Fees
 Product Availability
+Delivery Fees
 Transactions
 ```
 
-This separation helps keep the knowledge base clean and prevents outdated operational information from being treated as permanent knowledge.
+This separation reduces the risk of using outdated operational information as static AI knowledge.
 
-## Example Query
+---
+
+## 💬 Example
+
+### User Question
 
 ```text
-Customer:
 ما هي سياسة الاسترجاع؟
-
-        ↓
-
-Question Embedding
-
-        ↓
-
-Vector Search
-
-        ↓
-
-Relevant Policy Document
-
-        ↓
-
-AI Agent
-
-        ↓
-
-Answer based on retrieved context
 ```
 
-## Example Knowledge Retrieval
+### Retrieval
 
 ```text
-Query:
-هل يمكنني إرجاع المنتج بعد استلامه؟
+Question
+   ↓
+Embedding
+   ↓
+Vector Search
+   ↓
+Return Policy Document
+```
 
-Retrieved Context:
+### Retrieved Context
+
+```text
 Return Policy
-- Customers can request a return according to the
-  company's return conditions.
-- Return requests must follow the stated policy.
 
-AI Response:
-أكيد. يمكن طلب الاسترجاع وفقًا لسياسة الاسترجاع
+Customers can request a return according to
+the company's return conditions.
+```
+
+### AI Response
+
+```text
+يمكن طلب الاسترجاع وفقًا لسياسة الاسترجاع
 والشروط المحددة من الشركة.
 ```
 
-## Tech Stack
+The response is generated using the retrieved business context rather than relying only on the model's general knowledge.
 
-| Technology    | Purpose                     |
-| ------------- | --------------------------- |
-| n8n           | Workflow automation         |
-| OpenAI        | LLM and embeddings          |
-| Supabase      | Database and vector storage |
-| PostgreSQL    | Structured data             |
-| pgvector      | Vector similarity search    |
-| Evolution API | WhatsApp integration        |
-| RAG           | Knowledge retrieval         |
-| REST APIs     | System integration          |
-| Webhooks      | Event-driven communication  |
+---
 
-## Automation Workflow
+## 🔄 Automation Workflow
+
+The RAG pipeline can be orchestrated using n8n:
 
 ```text
-WhatsApp Message
-       ↓
-Evolution API
-       ↓
-n8n Webhook
-       ↓
-Process User Question
-       ↓
+User Question
+      ↓
+n8n
+      ↓
 Generate Embedding
-       ↓
-Search Vector Database
-       ↓
-Retrieve Relevant Documents
-       ↓
-Pass Context to AI Agent
-       ↓
+      ↓
+Query Vector Database
+      ↓
+Retrieve Relevant Context
+      ↓
+Build AI Prompt
+      ↓
+LLM / AI Agent
+      ↓
 Generate Response
-       ↓
-Send Response to WhatsApp
 ```
 
-## Design Principles
+---
+
+## 📱 Optional WhatsApp Interface
+
+WhatsApp can be used as a conversational interface:
+
+```text
+Customer
+   ↓
+WhatsApp
+   ↓
+Evolution API
+   ↓
+n8n
+   ↓
+RAG Pipeline
+   ↓
+AI Agent
+   ↓
+Response
+   ↓
+WhatsApp
+```
+
+WhatsApp is treated as an **interface layer**, while the core project remains focused on RAG and knowledge retrieval.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology        | Purpose                          |
+| ----------------- | -------------------------------- |
+| **n8n**           | Workflow orchestration           |
+| **OpenAI**        | LLM and embeddings               |
+| **Supabase**      | Database and vector storage      |
+| **PostgreSQL**    | Structured data                  |
+| **pgvector**      | Vector similarity search         |
+| **Evolution API** | Optional WhatsApp integration    |
+| **RAG**           | Knowledge retrieval architecture |
+| **REST APIs**     | System integration               |
+| **Webhooks**      | Event-driven workflows           |
+
+---
+
+## 🧠 Design Principles
 
 ### 1. Retrieve Before Generating
 
-The assistant retrieves relevant business information before generating an answer.
+Relevant business information should be retrieved before generating a response.
 
-### 2. Do Not Invent Information
+### 2. Ground Responses in Retrieved Context
 
-If the required information cannot be found in the knowledge base, the assistant should not fabricate an answer.
+The AI should use the retrieved information when answering company-specific questions.
 
-### 3. Separate RAG from Live Data
+### 3. Do Not Invent Business Information
 
-RAG handles business knowledge, while structured tools and database queries handle frequently changing operational information.
+If the required information cannot be found, the assistant should not fabricate an answer.
 
-### 4. Keep Responses Grounded
+### 4. Separate Knowledge from Live Data
 
-The AI should base its answers on the retrieved business context whenever the question relates to company-specific information.
+RAG is used for business knowledge, while structured tools and database queries handle frequently changing information.
 
-### 5. Keep the Knowledge Base Maintainable
+### 5. Maintainable Knowledge Base
 
-Business documents should be organized so that information can be updated without changing the AI agent's core logic.
+Business information should be organized so that documents can be updated without changing the core AI workflow.
 
-## Security
+---
+
+## 🔐 Security
 
 This repository is intended for portfolio demonstration.
 
-Do not store:
+Never commit:
 
 * API keys
 * Database passwords
-* WhatsApp credentials
 * Webhook secrets
+* WhatsApp credentials
 * Private business information
 * Real customer data
 
-Credentials should be managed through secure n8n credentials, environment variables, or secret management systems.
+Credentials should be managed using secure credential storage, environment variables, or secret management systems.
 
-## Project Purpose
+---
 
-This project demonstrates how Retrieval-Augmented Generation can connect AI assistants to real business knowledge.
+## 📁 Suggested Project Structure
 
-It focuses on the architecture behind reliable AI knowledge retrieval rather than building a complete sales or order-management system.
+```text
+RAG-Business-Assistant/
+│
+├── README.md
+│
+├── database/
+│   └── schema.sql
+│
+├── prompts/
+│   └── rag-system-prompt.md
+│
+├── workflows/
+│   └── README.md
+│
+└── docs/
+    └── architecture.md
+```
+
+---
+
+## 🎯 Project Purpose
+
+This project demonstrates how **RAG can connect AI assistants to private business knowledge**.
+
+The primary focus is the architecture behind:
+
+**Documents → Embeddings → Vector Search → Retrieved Context → AI Response**
+
+It is designed as a portfolio project demonstrating practical knowledge of **RAG, AI agents, vector databases, and workflow automation**.
 
 ---
 
 ### Built by Alia Abuzaid
 
-AI Automation Developer | AI Agents | n8n | RAG | Business Automation
+**AI Automation Developer | AI Agents | n8n | RAG | Business Automation**

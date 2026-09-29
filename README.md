@@ -102,6 +102,7 @@ Grounded Response
 ```
 
 ---
+![RAG Business Assistant Architecture](docs/rag-architecture.png)
 
 ## 📚 Knowledge Base
 
